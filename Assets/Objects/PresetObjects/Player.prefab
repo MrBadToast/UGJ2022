@@ -15,7 +15,7 @@ GameObject:
   - component: {fileID: 8054341786458737895}
   m_Layer: 0
   m_Name: Player
-  m_TagString: Untagged
+  m_TagString: Player
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -104,6 +104,7 @@ MonoBehaviour:
   key_up: 273
   key_down: 274
   moveSpeed: 10
+  acceleration: 0.25
   drag: 0.25
 --- !u!50 &8054341786458737896
 Rigidbody2D:
