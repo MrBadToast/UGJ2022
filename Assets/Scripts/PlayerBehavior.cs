@@ -8,11 +8,8 @@ public class PlayerBehavior : MonoBehaviour
     static private PlayerBehavior instance;
     static public PlayerBehavior Instance { get { return instance; } }
 
-    public delegate bool ONPlayerDamaged();
+    public delegate void ONPlayerDamaged();
     public ONPlayerDamaged OnPlayerDamaged;
-
-    public delegate bool ONPlayerGainedPet(PetFollowing pet);
-    public ONPlayerGainedPet OnPlayerGainedPet;
 
     public delegate void ONPlayerDied();
     public ONPlayerDied OnPlayerDied;
@@ -44,7 +41,6 @@ public class PlayerBehavior : MonoBehaviour
     private bool isRhythmTimerOn = false;
     private float currentHealth;
     private float rhythmTimer = 0f;
-    private Vector2 forwardingDirection = Vector2.right;
     public bool IsControlActive { get { return isControlActive; } }
 
     private Rigidbody2D rbody;
@@ -64,7 +60,7 @@ public class PlayerBehavior : MonoBehaviour
     }
 
     private void Start()
-    {   
+    {
         currentHealth = fullHealth;
     }
 
@@ -99,11 +95,6 @@ public class PlayerBehavior : MonoBehaviour
     {
         if (isRhythmTimerOn)
             rhythmTimer += Time.deltaTime;
-
-        if (Input.GetKeyDown(key_tryDirection))
-        {
-
-        }
     }
 
     public void StartRhythmTimer()
@@ -143,8 +134,6 @@ public class PlayerBehavior : MonoBehaviour
         OnPlayerDied.Invoke();
         isControlActive = false;
     }
-
-
 
 }
 
