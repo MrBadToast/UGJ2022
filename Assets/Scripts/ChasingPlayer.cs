@@ -14,7 +14,7 @@ public class ChasingPlayer : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        playerPosition = TopViewCharacterBehavior.Instance.transform;
+        playerPosition = PlayerBehavior.Instance.transform;
         rb = this.GetComponent<Rigidbody2D>();
     }
     
@@ -49,7 +49,7 @@ public class ChasingPlayer : MonoBehaviour
     {
         if (collision.gameObject.CompareTag("Player"))
         {
-            TopViewCharacterBehavior.Instance.DamagePlayer(damage);
+            PlayerBehavior.Instance.DamagePlayer(damage);
         }
     }
 }

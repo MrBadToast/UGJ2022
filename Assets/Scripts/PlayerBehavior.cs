@@ -3,10 +3,10 @@ using System.Collections.Generic;
 using UnityEngine;
 using Sirenix.OdinInspector;
 
-public class TopViewCharacterBehavior : MonoBehaviour
+public class PlayerBehavior : MonoBehaviour
 {
-    static private TopViewCharacterBehavior instance;
-    static public TopViewCharacterBehavior Instance { get { return instance; } }
+    static private PlayerBehavior instance;
+    static public PlayerBehavior Instance { get { return instance; } }
 
     public delegate void ONPlayerDamaged();
     public ONPlayerDamaged OnPlayerDamaged;
