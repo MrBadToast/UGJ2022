@@ -6,7 +6,7 @@ using Sirenix.OdinInspector;
 public class TopViewCharacterBehavior : MonoBehaviour
 {
     static private TopViewCharacterBehavior instance;
-    static public TopViewCharacterBehavior Instance;
+    static public TopViewCharacterBehavior Instance { get { return instance; } }
 
     public delegate void ONPlayerDied();
     public ONPlayerDied OnPlayerDied;
@@ -22,6 +22,7 @@ public class TopViewCharacterBehavior : MonoBehaviour
 
     [Title("Properties")]
     [SerializeField] private float moveSpeed;
+    [SerializeField,Range(0f,1f)] private float acceleration;
     [SerializeField,Range(0f,1f)] private float drag;
 
     private bool isControlActive = true;
@@ -48,21 +49,21 @@ public class TopViewCharacterBehavior : MonoBehaviour
         if (Input.GetKey(key_right))
         {
             transform.right = Vector2.right;
-            rbody.velocity = new Vector2(moveSpeed,rbody.velocity.y);
+            rbody.velocity = Vector2.Lerp(rbody.velocity,new Vector2( moveSpeed,rbody.velocity.y),acceleration);
         }
         else if (Input.GetKey(key_left))
         {
             transform.right = Vector2.left;
-            rbody.velocity = new Vector2(-moveSpeed, rbody.velocity.y);
+            rbody.velocity = Vector2.Lerp(rbody.velocity, new Vector2(-moveSpeed, rbody.velocity.y), acceleration);
         }
 
         if (Input.GetKey(key_up))
         {
-            rbody.velocity = new Vector2(rbody.velocity.x, moveSpeed);
+            rbody.velocity = Vector2.Lerp(rbody.velocity, new Vector2(rbody.velocity.x, moveSpeed), acceleration);
         }
         else if (Input.GetKey(key_down))
         {
-            rbody.velocity = new Vector2(rbody.velocity.x, -moveSpeed);
+            rbody.velocity = Vector2.Lerp(rbody.velocity, new Vector2(rbody.velocity.x, -moveSpeed), acceleration);
         }
 
         rbody.velocity = Vector2.Lerp(rbody.velocity, Vector2.zero, drag);
