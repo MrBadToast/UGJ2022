@@ -10,13 +10,13 @@ public class PlayerBehavior : MonoBehaviour
     static private PlayerBehavior instance;
     static public PlayerBehavior Instance { get { return instance; } }
 
-    public delegate bool ONPlayerDamaged(PetFollowing pet);
+    public delegate bool ONPlayerDamaged();
     public ONPlayerDamaged OnPlayerDamaged;
 
     public delegate bool ONPlayerDied();
     public ONPlayerDied OnPlayerDied;
 
-    public delegate void ONPlayerGetFellow();
+    public delegate void ONPlayerGetFellow(PetFollowing pet);
     public ONPlayerGetFellow OnPlayerGetFellow;
 
     private enum ControlState
