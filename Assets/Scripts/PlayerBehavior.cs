@@ -8,10 +8,12 @@ public class PlayerBehavior : MonoBehaviour
     static private PlayerBehavior instance;
     static public PlayerBehavior Instance { get { return instance; } }
 
-    public delegate void ONPlayerDamaged();
+
+
+    public delegate bool ONPlayerDamaged();
     public ONPlayerDamaged OnPlayerDamaged;
 
-    public delegate void ONPlayerDied();
+    public delegate bool ONPlayerDied(PetFollowing pet);
     public ONPlayerDied OnPlayerDied;
 
     public delegate void ONPlayerGetFellow();
