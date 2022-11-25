@@ -15,7 +15,6 @@ public class ChasingPlayer : MonoBehaviour
     void Start()
     {
         playerPosition = TopViewCharacterBehavior.Instance.transform;
-        Debug.Log(TopViewCharacterBehavior.Instance.transform.position);
         rb = this.GetComponent<Rigidbody2D>();
     }
     
@@ -24,7 +23,15 @@ public class ChasingPlayer : MonoBehaviour
     {
         Vector3 direction = playerPosition.position - transform.position;
         float angle = Mathf.Atan2(direction.y, direction.x) * Mathf.Rad2Deg;
-        //rb.rotation = angle;
+        // rb.rotation = angle;
+        if(direction.x > 0)
+        {
+            transform.right = Vector3.right;
+        }
+        else if (direction.x < 0)
+        {
+            transform.right = Vector3.left;
+        }
         direction.Normalize();
         enemyMovement = direction;
     }
@@ -36,9 +43,11 @@ public class ChasingPlayer : MonoBehaviour
     {
         rb.MovePosition((Vector3)transform.position + (direction * moveSpeed * Time.deltaTime));
     }
-    private void OnTriggerEnter2D(Collider other)
+
+    // 플레이어와 충돌 시
+    private void OnTriggerEnter2D(Collider2D collision)
     {
-        if (other.gameObject.CompareTag("Player"))
+        if (collision.gameObject.CompareTag("Player"))
         {
             TopViewCharacterBehavior.Instance.DamagePlayer(damage);
         }
