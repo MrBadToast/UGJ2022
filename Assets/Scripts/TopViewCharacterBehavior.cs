@@ -22,7 +22,7 @@ public class TopViewCharacterBehavior : MonoBehaviour
 
     [Title("Properties")]
     [SerializeField] private float moveSpeed;
-    [SerializeField] private float drag;
+    [SerializeField,Range(0f,1f)] private float drag;
 
     private bool isControlActive = true;
     public bool IsControlActive { get { return isControlActive; } }
@@ -45,10 +45,27 @@ public class TopViewCharacterBehavior : MonoBehaviour
 
     private void FixedUpdate()
     {
-        if(Input.GetKey(key_right))
+        if (Input.GetKey(key_right))
         {
-
+            transform.right = Vector2.right;
+            rbody.velocity = new Vector2(moveSpeed,rbody.velocity.y);
         }
+        else if (Input.GetKey(key_left))
+        {
+            transform.right = Vector2.left;
+            rbody.velocity = new Vector2(-moveSpeed, rbody.velocity.y);
+        }
+
+        if (Input.GetKey(key_up))
+        {
+            rbody.velocity = new Vector2(rbody.velocity.x, moveSpeed);
+        }
+        else if (Input.GetKey(key_down))
+        {
+            rbody.velocity = new Vector2(rbody.velocity.x, -moveSpeed);
+        }
+
+        rbody.velocity = Vector2.Lerp(rbody.velocity, Vector2.zero, drag);
     }
 
 }
