@@ -3,8 +3,6 @@ using System.Collections.Generic;
 using UnityEngine;
 using Sirenix.OdinInspector;
 
-
-
 public class PlayerBehavior : MonoBehaviour
 {
     static private PlayerBehavior instance;
@@ -45,15 +43,16 @@ public class PlayerBehavior : MonoBehaviour
 
     [Title("References")]
     [SerializeField] private HealthBar healthBar;
-    [SerializeField] private GameObject DirectionArrow;
+    [SerializeField] private Transform DirectionArrowAnchor;
+    [SerializeField] private GameObject DirectionArrowObject;
+    [SerializeField] private GameObject DirectionArrowShot;
 
     private bool isControlActive = true;
-    private bool isRhythmTimerOn = false;
     private float currentHealth;
     private float rhythmTimer = 0f;
     private Vector2 forwardingDirection = Vector2.right;
     [SerializeField] private ControlState controlState = ControlState.NONE;
-    public bool IsControlActive { get { return isControlActive; } }
+    public bool IsControlValid { get { return isControlActive && Time.timeScale != 0f; } }
 
     private Rigidbody2D rbody;
 
@@ -105,21 +104,32 @@ public class PlayerBehavior : MonoBehaviour
 
     private void Update()
     {
-        if (isRhythmTimerOn)
-            rhythmTimer += Time.deltaTime;
-
-        if(controlState == ControlState.NONE)
+        if (IsControlValid)
         {
-            if(Input.GetKeyDown(key_tryDirection))
+            rbody.velocity = Vector2.Lerp(rbody.velocity, forwardingDirection.normalized, acceleration);
+
+            if (controlState == ControlState.NONE)
             {
-                controlState = ControlState.DIRECTION;
-                DirectionArrow.SetActive(true);
+                if (Input.GetKeyDown(key_tryDirection))
+                {
+                    controlState = ControlState.DIRECTION;
+                    DirectionArrowObject.SetActive(true);
+                }
+            }
+            else if (controlState == ControlState.DIRECTION)
+            {
+                SetArrowDirection();
+                if (Input.GetKeyDown(key_tryConfirm))
+                {
+                    controlState = ControlState.TIMING;
+                }
+            }
+            else if(controlState == ControlState.TIMING)
+            {
+
             }
         }
     }
-
-    public void StartRhythmTimer()
-    { isRhythmTimerOn =true; }
 
     public void DamagePlayer(float damageAmount) 
     {
@@ -159,9 +169,9 @@ public class PlayerBehavior : MonoBehaviour
     private void SetArrowDirection()
     {
         Vector3 mousePos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
-        Vector2 direction = transform.position - mousePos;
+        Vector2 direction = mousePos - transform.position;
 
-        DirectionArrow.transform.up = direction;
+        DirectionArrowAnchor.up = direction;
         
     }
 
