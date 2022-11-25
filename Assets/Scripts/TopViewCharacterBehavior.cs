@@ -28,6 +28,8 @@ public class TopViewCharacterBehavior : MonoBehaviour
     private bool isControlActive = true;
     public bool IsControlActive { get { return isControlActive; } }
 
+    public void DamagePlayer(float damageAmount) { }
+
     private Rigidbody2D rbody;
 
     private void Awake()
@@ -67,7 +69,10 @@ public class TopViewCharacterBehavior : MonoBehaviour
         }
 
         rbody.velocity = Vector2.Lerp(rbody.velocity, Vector2.zero, drag);
+
     }
+
+
 
 }
 
