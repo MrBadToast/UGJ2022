@@ -22,8 +22,6 @@ public class ChasingPlayer : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        Debug.Log(playerPosition);
-
         Vector3 direction = playerPosition.position - transform.position;
         float angle = Mathf.Atan2(direction.y, direction.x) * Mathf.Rad2Deg;
         //rb.rotation = angle;
