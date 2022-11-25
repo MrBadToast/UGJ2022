@@ -5,6 +5,7 @@ using UnityEngine;
 public class ChasingPlayer : MonoBehaviour
 {
     public float moveSpeed;
+    public float damage;
     Vector3 enemyMovement;
     Rigidbody2D rb;
 
@@ -36,5 +37,12 @@ public class ChasingPlayer : MonoBehaviour
     void MoveCharacter(Vector3 direction)
     {
         rb.MovePosition((Vector3)transform.position + (direction * moveSpeed * Time.deltaTime));
+    }
+    private void OnTriggerEnter2D(Collider other)
+    {
+        if (other.gameObject.CompareTag("Player"))
+        {
+            TopViewCharacterBehavior.Instance.DamagePlayer(damage);
+        }
     }
 }
