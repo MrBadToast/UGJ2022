@@ -3,21 +3,28 @@ using System.Collections.Generic;
 using UnityEngine;
 using Sirenix.OdinInspector;
 
+
+
 public class PlayerBehavior : MonoBehaviour
 {
     static private PlayerBehavior instance;
     static public PlayerBehavior Instance { get { return instance; } }
 
-
-
-    public delegate bool ONPlayerDamaged();
+    public delegate bool ONPlayerDamaged(PetFollowing pet);
     public ONPlayerDamaged OnPlayerDamaged;
 
-    public delegate bool ONPlayerDied(PetFollowing pet);
+    public delegate bool ONPlayerDied();
     public ONPlayerDied OnPlayerDied;
 
     public delegate void ONPlayerGetFellow();
     public ONPlayerGetFellow OnPlayerGetFellow;
+
+    private enum ControlState
+    {
+        NONE,
+        DIRECTION,
+        TIMING
+    }
 
     [Title("Controls")]
     [SerializeField] private KeyCode key_tryDirection;
@@ -38,11 +45,14 @@ public class PlayerBehavior : MonoBehaviour
 
     [Title("References")]
     [SerializeField] private HealthBar healthBar;
+    [SerializeField] private GameObject DirectionArrow;
 
     private bool isControlActive = true;
     private bool isRhythmTimerOn = false;
     private float currentHealth;
     private float rhythmTimer = 0f;
+    private Vector2 forwardingDirection = Vector2.right;
+    [SerializeField] private ControlState controlState = ControlState.NONE;
     public bool IsControlActive { get { return isControlActive; } }
 
     private Rigidbody2D rbody;
@@ -97,6 +107,15 @@ public class PlayerBehavior : MonoBehaviour
     {
         if (isRhythmTimerOn)
             rhythmTimer += Time.deltaTime;
+
+        if(controlState == ControlState.NONE)
+        {
+            if(Input.GetKeyDown(key_tryDirection))
+            {
+                controlState = ControlState.DIRECTION;
+                DirectionArrow.SetActive(true);
+            }
+        }
     }
 
     public void StartRhythmTimer()
@@ -135,6 +154,15 @@ public class PlayerBehavior : MonoBehaviour
     {
         OnPlayerDied.Invoke();
         isControlActive = false;
+    }
+
+    private void SetArrowDirection()
+    {
+        Vector3 mousePos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+        Vector2 direction = transform.position - mousePos;
+
+        DirectionArrow.transform.up = direction;
+        
     }
 
 }
