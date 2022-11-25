@@ -14,8 +14,9 @@ public class DelegateExample : MonoBehaviour
         PlayerBehavior.Instance.OnPlayerDamaged -= CallWhenPlayerDamaged;
     }
 
-    public void CallWhenPlayerDamaged()
+    public bool CallWhenPlayerDamaged()
     {
         //
+        return false;
     }
 }
