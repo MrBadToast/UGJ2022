@@ -45,7 +45,9 @@ public class PlayerBehavior : MonoBehaviour
     [SerializeField] private HealthBar healthBar;
     [SerializeField] private RhythmBar rhythmBar;
     [SerializeField] private Transform DirectionArrowAnchor;
+    [SerializeField] private Transform RhythmbarAnchor;
     [SerializeField] private GameObject DirectionArrowObject;
+    [SerializeField] private GameObject DirectionArrowBounce;
     [SerializeField] private GameObject DirectionArrowShot;
 
     private bool isControlActive = true;
@@ -120,16 +122,25 @@ public class PlayerBehavior : MonoBehaviour
             else if (controlState == ControlState.DIRECTION)
             {
                 SetArrowDirection();
-                if (Input.GetKeyDown(key_tryConfirm))
+                if (Input.GetKeyDown(key_tryDirection))
                 {
                     controlState = ControlState.TIMING;
+                    DirectionArrowObject.SetActive(false);
+                    DirectionArrowBounce.SetActive(true);
                     rhythmBar.gameObject.SetActive(true);
                 }
             }
-            else if(controlState == ControlState.TIMING)
+            else if (controlState == ControlState.TIMING)
             {
                 rhythmBar.BarMoving = true;
-                if(Input.GetKeyDown())
+                if (Input.GetKeyDown(key_tryConfirm))
+                {
+                    DirectionArrowBounce.SetActive(false);
+                    DirectionArrowShot.SetActive(true);
+                    rhythmBar.gameObject.SetActive(false);
+                    rhythmBar.BarMoving = false;
+                    controlState = ControlState.NONE;
+                }
             }
         }
     }
@@ -163,6 +174,12 @@ public class PlayerBehavior : MonoBehaviour
         healthBar.SetHealthbar(currentHealth/fullHealth);
     }
 
+    private IEnumerator Cor_RhythmBarTermination()
+    {
+        yield return new WaitForSeconds(2.0f);
+        rhythmBar.gameObject.SetActive(false);
+    }
+    
     private void PlayerDied()
     {
         OnPlayerDied.Invoke();
@@ -177,6 +194,7 @@ public class PlayerBehavior : MonoBehaviour
         DirectionArrowAnchor.up = direction;
         
     }
+
 
 }
 
