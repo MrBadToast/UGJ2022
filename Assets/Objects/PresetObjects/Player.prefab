@@ -2841,6 +2841,7 @@ MonoBehaviour:
   acceleration: 0.25
   drag: 0.25
   DamageCooldown: 2
+  sightLight: {fileID: 448034336}
   spriteRenderer: {fileID: 7901356960509041903}
   healthBar: {fileID: 1964646894}
   rhythmBar: {fileID: 1048943946}

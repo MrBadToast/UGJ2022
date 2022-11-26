@@ -4,6 +4,7 @@ using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.UI;
 using Cinemachine;
+using UnityEngine.Rendering.Universal;
 
 public class PetManager : MonoBehaviour
 {
@@ -35,6 +36,12 @@ public class PetManager : MonoBehaviour
         PlayerBehavior.Instance.OnPlayerDamaged -= CallWhenPlayerDamaged;
     }
 
+    private void FixedUpdate()
+    {
+        var light = PlayerBehavior.Instance.sightLight;
+        light.pointLightOuterRadius = Mathf.Lerp(light.pointLightOuterRadius, lightTarget, 0.1f);
+    }
+
     //void Update()
     //{
     //    // 펫이 있을 경우, 펫에게 따라갈 대상의 위치 할당
@@ -53,7 +60,7 @@ public class PetManager : MonoBehaviour
     //    }
     //}
     // 플레이어가 데미지를 입었을 때
-    
+
     public bool CallWhenPlayerDamaged()
     {
         Debug.Log("펫 제거 함수 호출");
@@ -70,6 +77,8 @@ public class PetManager : MonoBehaviour
         else return false;
     }
 
+
+    float lightTarget = 5.0f;
     // 플레이어가 펫을 획득 성공했을 때
     public bool OnPlayerGained(PetFollowing pet)
     { 
@@ -84,6 +93,10 @@ public class PetManager : MonoBehaviour
         if (petList.Count == 1)
         { vCam2.gameObject.SetActive(true); vCam3.gameObject.SetActive(false); }
         if (petList.Count == 3) vCam3.gameObject.SetActive(true);
+
+        lightTarget = (petList.Count * 5f) + 5f;
+
+   
 
         // 혹시 몰라서 bool타입 return 했으나, 아직 쓸 데는 없음 
         return true;

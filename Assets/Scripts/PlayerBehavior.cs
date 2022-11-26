@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using Sirenix.OdinInspector;
 using DG.Tweening;
+using UnityEngine.Rendering.Universal;
 
 public class PlayerBehavior : MonoBehaviour
 {
@@ -41,6 +42,7 @@ public class PlayerBehavior : MonoBehaviour
     [SerializeField] private float DamageCooldown = 2.0f;
 
     [Title("References")]
+    public Light2D sightLight;
     [SerializeField] private SpriteRenderer spriteRenderer;
     [SerializeField] private HealthBar healthBar;
     [SerializeField] private RhythmBar rhythmBar;
