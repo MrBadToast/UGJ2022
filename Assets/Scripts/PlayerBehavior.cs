@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using Sirenix.OdinInspector;
+using DG.Tweening;
 
 public class PlayerBehavior : MonoBehaviour
 {
@@ -49,6 +50,8 @@ public class PlayerBehavior : MonoBehaviour
     [SerializeField] private GameObject DirectionArrowBounce;
     [SerializeField] private GameObject DirectionArrowShot;
     [SerializeField] private GameObject GoalIndicatorArrow;
+    [SerializeField] private DOTweenAnimation posFeedbackAnimation;
+    [SerializeField] private DOTweenAnimation negFeedbackAnimation;
     [SerializeField] private Transform GoalPosition;
     [SerializeField] private Transform RCO_Up;
     [SerializeField] private Transform RCO_Right;
@@ -90,7 +93,7 @@ public class PlayerBehavior : MonoBehaviour
 
     private void FixedUpdate()
     {
-        rbody.velocity = forwardingDirection * moveSpeed;
+      //  rbody.velocity = forwardingDirection * moveSpeed;
     }
 
     private void Update()
@@ -133,11 +136,17 @@ public class PlayerBehavior : MonoBehaviour
                 if (Input.GetKeyDown(key_tryConfirm))
                 {
                     var beat = BeatManager.Instance;
+
                     if (beat.IsCurrentInputValidBeat())
                     {
+                        posFeedbackAnimation.DORestart();
                         Vector3 mousePos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
                         Vector2 direction = mousePos - transform.position;
                         SetPlayerDirection(direction);
+                    }
+                    else
+                    {
+                        negFeedbackAnimation.DORestart();
                     }
 
                     StopCoroutine("Cor_RhythmBarTermination");

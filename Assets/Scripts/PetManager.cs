@@ -3,12 +3,15 @@ using System.Collections.Generic;
 using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.UI;
+using Cinemachine;
 
 public class PetManager : MonoBehaviour
 {
     static private PetManager instance;
     static public PetManager Instance { get { return instance; } }
 
+    public CinemachineVirtualCamera vCam2;
+    public CinemachineVirtualCamera vCam3;
 
     public List<PetFollowing> petList;
     int prevPetListCount = 0;
@@ -66,14 +69,21 @@ public class PetManager : MonoBehaviour
         // 남아있는 펫이 없다면 return false
         else return false;
     }
+
     // 플레이어가 펫을 획득 성공했을 때
     public bool OnPlayerGained(PetFollowing pet)
     { 
         if(petList.Count == 0) pet.seniorTransform = PlayerBehavior.Instance.transform;
         else
-        { pet.seniorTransform = petList[petList.Count].seniorTransform; }
+        { pet.seniorTransform = petList[petList.Count-1].transform; }
         
         petList.Add(pet);
+
+        if (petList.Count == 0)
+        { vCam2.gameObject.SetActive(false); vCam3.gameObject.SetActive(false); }
+        if (petList.Count == 1)
+        { vCam2.gameObject.SetActive(true); vCam3.gameObject.SetActive(false); }
+        if (petList.Count == 3) vCam3.gameObject.SetActive(true);
 
         // 혹시 몰라서 bool타입 return 했으나, 아직 쓸 데는 없음 
         return true;
