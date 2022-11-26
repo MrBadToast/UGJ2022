@@ -5,7 +5,7 @@ using UnityEngine;
 
 
 public class PetManager : MonoBehaviour
-{
+{ 
     public List<PetFollowing> petList = new List<PetFollowing>(100);
     int prevPetListCount = 0;
 
@@ -45,6 +45,7 @@ public class PetManager : MonoBehaviour
         }
     }
     // 플레이어가 데미지를 입었을 때
+    
     public bool CallWhenPlayerDamaged()
     {
         // 펫이 남아있다면
