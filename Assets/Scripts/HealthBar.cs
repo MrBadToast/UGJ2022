@@ -17,7 +17,7 @@ public class HealthBar : MonoBehaviour
     {
         if(targetPoint != slider.value)
         {
-            slider.value = Mathf.Lerp(slider.value, targetPoint, 0.01f);
+            slider.value = Mathf.Lerp(slider.value, targetPoint, 0.3f);
         }
     }
 }
