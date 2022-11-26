@@ -380,7 +380,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &1048943942
 RectTransform:
   m_ObjectHideFlags: 0
@@ -2836,11 +2836,13 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   key_tryDirection: 323
   key_tryConfirm: 32
-  moveSpeed: 2
+  moveSpeed: 4
   fullHealth: 100
   acceleration: 0.25
   drag: 0.25
   DamageCooldown: 2
+  petGainParticle: {fileID: 0}
+  petLostParticle: {fileID: 0}
   sightLight: {fileID: 448034336}
   spriteRenderer: {fileID: 7901356960509041903}
   healthBar: {fileID: 1964646894}

@@ -75,6 +75,7 @@ public class PlayerBehavior : MonoBehaviour
 
     private Rigidbody2D rbody;
     private Animator animator;
+    private SimpleSoundModule soundModule;
 
 
     private void Awake()
@@ -90,6 +91,7 @@ public class PlayerBehavior : MonoBehaviour
 
         rbody = GetComponent<Rigidbody2D>();
         animator = GetComponent<Animator>();
+        soundModule = GetComponent<SimpleSoundModule>();
     }
 
     private void Start()
@@ -112,7 +114,7 @@ public class PlayerBehavior : MonoBehaviour
 
         if (IsControlValid)
         {
-            rbody.velocity = Vector2.Lerp(rbody.velocity, forwardingDirection.normalized, acceleration);
+            rbody.velocity = Vector2.Lerp(rbody.velocity, forwardingDirection.normalized*moveSpeed, acceleration);
 
             animator.SetBool("IsWalking",true);
 
@@ -145,6 +147,7 @@ public class PlayerBehavior : MonoBehaviour
 
                     if (beat.IsCurrentInputValidBeat())
                     {
+                        soundModule.Play("RightBeat");
                         posFeedbackAnimation.DORestart();
                         Vector3 mousePos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
                         Vector2 direction = mousePos - transform.position;
