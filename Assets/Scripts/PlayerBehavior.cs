@@ -38,9 +38,6 @@ public class PlayerBehavior : MonoBehaviour
     [SerializeField, Range(0f, 1f)] private float acceleration;
     [SerializeField, Range(0f, 1f)] private float drag;
     [SerializeField] private float DamageCooldown = 2.0f;
-    [Title("RhythmMechanicProperties")]
-    [SerializeField] private float interval = 0.5f;
-    [SerializeField] private float tollerance = 0.1f;
 
     [Title("References")]
     [SerializeField] private HealthBar healthBar;
