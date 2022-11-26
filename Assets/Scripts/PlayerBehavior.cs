@@ -41,6 +41,10 @@ public class PlayerBehavior : MonoBehaviour
     [SerializeField, Range(0f, 1f)] private float drag;
     [SerializeField] private float DamageCooldown = 2.0f;
 
+    [Title("Prefabs")]
+    [SerializeField] private GameObject petGainParticle;
+    [SerializeField] private GameObject petLostParticle;
+
     [Title("References")]
     public Light2D sightLight;
     [SerializeField] private SpriteRenderer spriteRenderer;
@@ -176,13 +180,12 @@ public class PlayerBehavior : MonoBehaviour
                SetPlayerDirection(new Vector2(forwardingDirection.x, -forwardingDirection.y));
             }
         }
-
-
     }
 
 
     public void DamagePlayer(float damageAmount)
     {
+        if (!isControlActive) return;
         if (damageT > 0) return;
         damageT = DamageCooldown;
 
@@ -204,7 +207,7 @@ public class PlayerBehavior : MonoBehaviour
             animator.SetTrigger("Hurt");
             StopCoroutine("Cor_DamageFliker");
             StartCoroutine("Cor_DamageFliker",DamageCooldown);
-             
+            forwardingDirection = -forwardingDirection;
         }
 
         healthBar.SetHealthbar(currentHealth / fullHealth);
@@ -256,7 +259,8 @@ public class PlayerBehavior : MonoBehaviour
 
     private void PlayerDied()
     {
-        OnPlayerDied.Invoke();
+        if (OnPlayerDied != null)
+            OnPlayerDied.Invoke();
         isControlActive = false;
         Invoke("Reset", 3.0f);
     }

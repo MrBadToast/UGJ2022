@@ -16,6 +16,7 @@ public class PetManager : MonoBehaviour
 
     public List<PetFollowing> petList;
     int prevPetListCount = 0;
+    public int PetCount { get { return petList.Count; } }
 
     private void Awake()
     {
@@ -70,6 +71,7 @@ public class PetManager : MonoBehaviour
             // 펫 오브젝트 자체를 destroy 
             Destroy(petList[0].gameObject);
             petList.RemoveAt(0);
+            if(petList.Count >= 1)
             petList[0].seniorTransform = PlayerBehavior.Instance.transform;
             return true;
         }

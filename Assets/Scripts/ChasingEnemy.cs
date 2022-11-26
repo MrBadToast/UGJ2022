@@ -60,8 +60,8 @@ public class ChasingEnemy : MonoBehaviour
         rb.MovePosition((Vector3)transform.position + (moveSpeed * Time.deltaTime * direction));
     }
 
-    // 플레이어와 충돌 시
-    private void OnTriggerEnter2D(Collider2D collision)
+
+    private void OnCollisionEnter2D(Collision2D collision)
     {
         if (collision.gameObject.CompareTag("Player"))
         {   // 적 캐릭터가 가진 damage값을 return
