@@ -6,6 +6,7 @@ public class PetFollowing : MonoBehaviour
 {
     public float moveSpeed;
     public float distanceLimit;
+    public bool isAssignedAlready = false;
     // petMovment는 안쓰지만 일단 남겨놓음
     Vector3 petMovment;
     Rigidbody2D rb;
@@ -56,24 +57,25 @@ public class PetFollowing : MonoBehaviour
         }
     }
 
-    // 혹시 몰라서 남겨놓음. FixedUpdate와 MoveCharacter 둘다.
-    private void FixedUpdate()
-    {
-        //원래 쓰려고 했으나, 안써도 될 것 같아서 안씀
-        //MoveCharacter(petMovment);
-    }
-    void MoveCharacter(Vector3 direction)
-    {
-        rb.MovePosition((Vector3)transform.position + (direction * moveSpeed * Time.deltaTime));
-    }
+    //// 혹시 몰라서 남겨놓음. FixedUpdate와 MoveCharacter 둘다.
+    //private void FixedUpdate()
+    //{
+    //    //원래 쓰려고 했으나, 안써도 될 것 같아서 안씀
+    //    //MoveCharacter(petMovment);
+    //}
+    //void MoveCharacter(Vector3 direction)
+    //{
+    //    rb.MovePosition((Vector3)transform.position + (direction * moveSpeed * Time.deltaTime));
+    //}
 
     // 플레이어와 충돌 시 -> 펫 획득
     private void OnTriggerEnter2D(Collider2D collision)
     {
         if (collision.gameObject.CompareTag("Player"))
         {
-            // 리듬게임을 진행하고 성공하면 플레이어 따라가는 코드 
-            // TopViewCharacterBehavior.Instance.
+            if (isAssignedAlready) return;
+            PetManager.Instance.OnPlayerGained(this);
+            isAssignedAlready = true;
         }
     }
 }

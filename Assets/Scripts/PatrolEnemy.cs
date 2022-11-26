@@ -68,8 +68,6 @@ public class PatrolEnemy : MonoBehaviour
         direction.Normalize();
         enemyMovement = direction;
 
-
-
     }
 
     // 플레이어와 충돌 시

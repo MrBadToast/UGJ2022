@@ -48,9 +48,12 @@ public class PlayerBehavior : MonoBehaviour
     [SerializeField] private GameObject DirectionArrowObject;
     [SerializeField] private GameObject DirectionArrowBounce;
     [SerializeField] private GameObject DirectionArrowShot;
+    [SerializeField] private GameObject GoalIndicatorArrow;
+    [SerializeField] private Transform GoalPosition;
     [SerializeField] private Transform RCO_Up;
     [SerializeField] private Transform RCO_Right;
     [SerializeField] private string WallObjectTag;
+    [SerializeField] private string PetObjectTag;
     [SerializeField] private LayerMask WallLayer;
 
     private bool isControlActive = false;
@@ -95,6 +98,8 @@ public class PlayerBehavior : MonoBehaviour
         damageT -= Time.deltaTime;
 
         animator.SetBool("IsWalking", false);
+
+        GoalIndicatorArrow.transform.up = GoalPosition.position - transform.position;
 
         if (IsControlValid)
         {
@@ -150,7 +155,6 @@ public class PlayerBehavior : MonoBehaviour
     {
         if (collision.gameObject.tag == WallObjectTag)
         {
-  
             if(Physics2D.Raycast(transform.position,new Vector2(forwardingDirection.x,0f),1.5f,WallLayer))
             {
                 Debug.Log("COL");
@@ -161,14 +165,24 @@ public class PlayerBehavior : MonoBehaviour
                SetPlayerDirection(new Vector2(forwardingDirection.x, -forwardingDirection.y));
             }
         }
+
+
     }
+
 
     public void DamagePlayer(float damageAmount)
     {
         if (damageT > 0) return;
         damageT = DamageCooldown;
 
-        if (damageAmount >= currentHealth)
+        var hasPet = OnPlayerDamaged.Invoke();
+
+        if (!hasPet)
+        {
+            currentHealth -= damageAmount;
+        }
+
+        if (0 >= currentHealth)
         {
             animator.SetTrigger("Dead");
             PlayerDied();
@@ -176,11 +190,10 @@ public class PlayerBehavior : MonoBehaviour
         }
         else
         {
-            currentHealth -= damageAmount;
             animator.SetTrigger("Hurt");
             StopCoroutine("Cor_DamageFliker");
             StartCoroutine("Cor_DamageFliker",DamageCooldown);
-            OnPlayerDamaged.Invoke();
+             
         }
 
         healthBar.SetHealthbar(currentHealth / fullHealth);
@@ -234,6 +247,7 @@ public class PlayerBehavior : MonoBehaviour
     {
         OnPlayerDied.Invoke();
         isControlActive = false;
+        Invoke("Reset", 3.0f);
     }
 
     private void SetArrowDirection()
@@ -257,6 +271,11 @@ public class PlayerBehavior : MonoBehaviour
         }
 
         forwardingDirection = direction.normalized;
+    }
+
+    private void Reset()
+    {
+        SceneLoader.Instance.LoadScene(UnityEngine.SceneManagement.SceneManager.GetActiveScene().name);
     }
 }
 

@@ -71,5 +71,4 @@ public class BeatManager : MonoBehaviour
         else
             return false;
     }
-
 }
