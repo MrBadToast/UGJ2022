@@ -35,26 +35,36 @@ public class PlayerBehavior : MonoBehaviour
     [Title("Properties")]
     [SerializeField] private float moveSpeed;
     [SerializeField] private float fullHealth;
-    [SerializeField,Range(0f,1f)] private float acceleration;
-    [SerializeField,Range(0f,1f)] private float drag;
+    [SerializeField, Range(0f, 1f)] private float acceleration;
+    [SerializeField, Range(0f, 1f)] private float drag;
+    [SerializeField] private float DamageCooldown = 2.0f;
     [Title("RhythmMechanicProperties")]
     [SerializeField] private float interval = 0.5f;
     [SerializeField] private float tollerance = 0.1f;
 
     [Title("References")]
     [SerializeField] private HealthBar healthBar;
+    [SerializeField] private RhythmBar rhythmBar;
     [SerializeField] private Transform DirectionArrowAnchor;
+    [SerializeField] private Transform RhythmbarAnchor;
     [SerializeField] private GameObject DirectionArrowObject;
+    [SerializeField] private GameObject DirectionArrowBounce;
     [SerializeField] private GameObject DirectionArrowShot;
+    [SerializeField] private Transform RCO_Up;
+    [SerializeField] private Transform RCO_Right;
+    [SerializeField] private string WallObjectTag;
+    [SerializeField] private LayerMask WallLayer;
 
     private bool isControlActive = true;
     private float currentHealth;
     private float rhythmTimer = 0f;
+    private float damageT = 0f;
     private Vector2 forwardingDirection = Vector2.right;
     [SerializeField] private ControlState controlState = ControlState.NONE;
     public bool IsControlValid { get { return isControlActive && Time.timeScale != 0f; } }
 
     private Rigidbody2D rbody;
+    private SpriteRenderer spriteRenderer;
 
     private void Awake()
     {
@@ -68,42 +78,24 @@ public class PlayerBehavior : MonoBehaviour
         }
 
         rbody = GetComponent<Rigidbody2D>();
+        spriteRenderer = GetComponent<SpriteRenderer>();
     }
 
     private void Start()
     {
         currentHealth = fullHealth;
+        forwardingDirection = Vector2.right;
     }
 
     private void FixedUpdate()
     {
-        {
-            //if (Input.GetKey(key_right))
-            //{
-            //    transform.right = Vector2.right;
-            //    rbody.velocity = Vector2.Lerp(rbody.velocity,new Vector2( moveSpeed,rbody.velocity.y),acceleration);
-            //}
-            //else if (Input.GetKey(key_left))
-            //{
-            //    transform.right = Vector2.left;
-            //    rbody.velocity = Vector2.Lerp(rbody.velocity, new Vector2(-moveSpeed, rbody.velocity.y), acceleration);
-            //}
-
-            //if (Input.GetKey(key_up))
-            //{
-            //    rbody.velocity = Vector2.Lerp(rbody.velocity, new Vector2(rbody.velocity.x, moveSpeed), acceleration);
-            //}
-            //else if (Input.GetKey(key_down))
-            //{
-            //    rbody.velocity = Vector2.Lerp(rbody.velocity, new Vector2(rbody.velocity.x, -moveSpeed), acceleration);
-            //}
-
-            //rbody.velocity = Vector2.Lerp(rbody.velocity, Vector2.zero, drag);
-        }       
+        rbody.velocity = forwardingDirection * moveSpeed;
     }
 
     private void Update()
     {
+        damageT -= Time.deltaTime;
+
         if (IsControlValid)
         {
             rbody.velocity = Vector2.Lerp(rbody.velocity, forwardingDirection.normalized, acceleration);
@@ -119,21 +111,62 @@ public class PlayerBehavior : MonoBehaviour
             else if (controlState == ControlState.DIRECTION)
             {
                 SetArrowDirection();
-                if (Input.GetKeyDown(key_tryConfirm))
+                if (Input.GetKeyDown(key_tryDirection))
                 {
+                    StopCoroutine("Cor_RhythmBarTermination");
                     controlState = ControlState.TIMING;
+                    DirectionArrowObject.SetActive(false);
+                    DirectionArrowBounce.SetActive(true);
+                    rhythmBar.gameObject.SetActive(true);
                 }
             }
-            else if(controlState == ControlState.TIMING)
+            else if (controlState == ControlState.TIMING)
             {
+                rhythmBar.BarMoving = true;
+                if (Input.GetKeyDown(key_tryConfirm))
+                {
+                    var beat = BeatManager.Instance;
+                    if (beat.IsCurrentInputValidBeat())
+                    {
+                        Vector3 mousePos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+                        Vector2 direction = mousePos - transform.position;
+                        SetPlayerDirection(direction);
+                    }
 
+                    StopCoroutine("Cor_RhythmBarTermination");
+                    StartCoroutine("Cor_RhythmBarTermination");
+                    DirectionArrowBounce.SetActive(false);
+                    DirectionArrowShot.SetActive(true);
+                    rhythmBar.BarMoving = false;
+                    controlState = ControlState.NONE;
+                }
             }
         }
     }
 
-    public void DamagePlayer(float damageAmount) 
+    private void OnCollisionEnter2D(Collision2D collision)
     {
-        if(damageAmount >= currentHealth)
+        if (collision.gameObject.tag == WallObjectTag)
+        {
+  
+            if(Physics2D.Raycast(transform.position,new Vector2(forwardingDirection.x,0f),1.5f,WallLayer))
+            {
+                Debug.Log("COL");
+                SetPlayerDirection(new Vector2(-forwardingDirection.x, forwardingDirection.y));
+            }
+            if(Physics2D.Raycast(transform.position, new Vector2(0f, forwardingDirection.y), 1.5f,WallLayer))
+            {
+               SetPlayerDirection(new Vector2(forwardingDirection.x, -forwardingDirection.y));
+            }
+        }
+    }
+
+    public void DamagePlayer(float damageAmount)
+    {
+        if (damageT > 0) return;
+        damageT = DamageCooldown;
+
+        if (damageAmount >= currentHealth)
         {
             PlayerDied();
             currentHealth = 0f;
@@ -141,6 +174,9 @@ public class PlayerBehavior : MonoBehaviour
         else
         {
             currentHealth -= damageAmount;
+            StopCoroutine("Cor_DamageFliker");
+            StartCoroutine("Cor_DamageFliker",DamageCooldown);
+            OnPlayerDamaged.Invoke();
         }
 
         healthBar.SetHealthbar(currentHealth / fullHealth);
@@ -148,7 +184,7 @@ public class PlayerBehavior : MonoBehaviour
 
     public void HealPlayer(float healAmount)
     {
-        if(healAmount + currentHealth >= fullHealth)
+        if (healAmount + currentHealth >= fullHealth)
         {
             currentHealth = fullHealth;
         }
@@ -157,7 +193,31 @@ public class PlayerBehavior : MonoBehaviour
             currentHealth += healAmount;
         }
 
-        healthBar.SetHealthbar(currentHealth/fullHealth);
+        healthBar.SetHealthbar(currentHealth / fullHealth);
+    }
+
+    private IEnumerator Cor_RhythmBarTermination()
+    {
+        yield return new WaitForSeconds(0.5f);
+        rhythmBar.gameObject.SetActive(false);
+    }
+
+    private IEnumerator Cor_DamageFliker(float time)
+    {
+        for(float t = time; t > 0f; t -= Time.fixedDeltaTime)
+        {
+            if(t % 0.2f > 0.1f)
+            {
+                spriteRenderer.color = Color.red;
+            }
+            else
+            {
+                spriteRenderer.color = Color.white;
+            }    
+            yield return new WaitForFixedUpdate();
+        }
+
+        spriteRenderer.color = Color.white;
     }
 
     private void PlayerDied()
@@ -172,8 +232,21 @@ public class PlayerBehavior : MonoBehaviour
         Vector2 direction = mousePos - transform.position;
 
         DirectionArrowAnchor.up = direction;
-        
+
     }
 
+    private void SetPlayerDirection(Vector2 direction)
+    {
+        if (direction.x > 0)
+        {
+            spriteRenderer.flipX = false;
+        }
+        else
+        {
+            spriteRenderer.flipX = true;
+        }
+
+        forwardingDirection = direction.normalized;
+    }
 }
 
