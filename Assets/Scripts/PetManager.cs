@@ -29,7 +29,11 @@ public class PetManager : MonoBehaviour
     private void Start()
     {
         PlayerBehavior.Instance.OnPlayerDamaged += CallWhenPlayerDamaged;
+<<<<<<< HEAD
         
+=======
+
+>>>>>>> Develop
     }
 
     private void OnDestroy()
@@ -39,8 +43,25 @@ public class PetManager : MonoBehaviour
 
     private void FixedUpdate()
     {
+<<<<<<< HEAD
         var light = PlayerBehavior.Instance.sightLight;
         light.pointLightOuterRadius = Mathf.Lerp(light.pointLightOuterRadius, lightTarget, 0.1f);
+=======
+        // 펫이 있을 경우, 펫에게 따라갈 대상의 위치 할당
+        // 리소스를 위해 펫 리스트에 변화가 생겼을 경우에만 실행
+        if (petList.Count > 0 && petList.Count != prevPetListCount)
+        {
+            // transform을 대입하는 것은 주소를 주는 것. 벨류를 주는 게 아니기 때문에 최초 1회만 주면 됨
+            // 첫 번째 펫에게는 플레이어의 위치 할당
+            petList[0].seniorTransform = PlayerBehavior.Instance.transform;
+            // 두 번째 펫부터는 그 앞의 펫 위치 할당 2
+            for (int i = 1; i < petList.Count; i++)
+            {   
+                petList[i].seniorTransform = petList[i - 1].transform;
+            }
+            prevPetListCount = petList.Count;
+        }
+>>>>>>> Develop
     }
 
     //void Update()
