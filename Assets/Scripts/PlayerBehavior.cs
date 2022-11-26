@@ -40,6 +40,7 @@ public class PlayerBehavior : MonoBehaviour
     [SerializeField] private float DamageCooldown = 2.0f;
 
     [Title("References")]
+    [SerializeField] private SpriteRenderer spriteRenderer;
     [SerializeField] private HealthBar healthBar;
     [SerializeField] private RhythmBar rhythmBar;
     [SerializeField] private Transform DirectionArrowAnchor;
@@ -61,7 +62,7 @@ public class PlayerBehavior : MonoBehaviour
     public bool IsControlValid { get { return isControlActive && Time.timeScale != 0f; } }
 
     private Rigidbody2D rbody;
-    private SpriteRenderer spriteRenderer;
+
 
     private void Awake()
     {
