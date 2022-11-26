@@ -11,8 +11,10 @@ public class PauseMenu : MonoBehaviour
 
     void Start()
     {
+        // 유니티 에디터 창에서 직접 연결시켜주어야 함
         returnGame.onClick.AddListener(ResumeBtn);
         exitGame.onClick.AddListener(ToTitle);
+        // pauseMenuCanvas도 직접 추가해주어야 함 
     }
     void Update()
     {

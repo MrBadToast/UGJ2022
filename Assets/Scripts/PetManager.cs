@@ -14,9 +14,9 @@ public class PetManager : MonoBehaviour
         PlayerBehavior.Instance.OnPlayerDamaged += CallWhenPlayerDamaged;
 
         // 테스트용 인스턴스
-        PetFollowing pet1 = GameObject.Find("pet1").GetComponent<PetFollowing>();
-        PetFollowing pet2 = GameObject.Find("pet2").GetComponent<PetFollowing>();
-        PetFollowing pet3 = GameObject.Find("pet3").GetComponent<PetFollowing>();
+        PetFollowing pet1 = GameObject.Find("pet_flash").GetComponent<PetFollowing>();
+        PetFollowing pet2 = GameObject.Find("pet_candle").GetComponent<PetFollowing>();
+        PetFollowing pet3 = GameObject.Find("pet_bulb").GetComponent<PetFollowing>();
         petList.Add(pet1);
         petList.Add(pet2);
         petList.Add(pet3);
