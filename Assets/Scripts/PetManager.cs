@@ -64,6 +64,7 @@ public class PetManager : MonoBehaviour
 
     public bool CallWhenPlayerDamaged()
     {
+
         Debug.Log("펫 제거 함수 호출");
         // 펫이 남아있다면
         if (petList.Count != 0)
@@ -83,7 +84,8 @@ public class PetManager : MonoBehaviour
     float lightTarget = 5.0f;
     // 플레이어가 펫을 획득 성공했을 때
     public bool OnPlayerGained(PetFollowing pet)
-    { 
+    {
+        PlayerBehavior.Instantiate(PlayerBehavior.Instance.petGainParticle, PlayerBehavior.Instance.transform.position, Quaternion.identity);
         if(petList.Count == 0) pet.seniorTransform = PlayerBehavior.Instance.transform;
         else
         { pet.seniorTransform = petList[petList.Count-1].transform; }

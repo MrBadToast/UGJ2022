@@ -42,8 +42,8 @@ public class PlayerBehavior : MonoBehaviour
     [SerializeField] private float DamageCooldown = 2.0f;
 
     [Title("Prefabs")]
-    [SerializeField] private GameObject petGainParticle;
-    [SerializeField] private GameObject petLostParticle;
+    public GameObject petGainParticle;
+    public GameObject petLostParticle;
 
     [Title("References")]
     public Light2D sightLight;
