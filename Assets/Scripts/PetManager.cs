@@ -1,15 +1,24 @@
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 
 
 public class PetManager : MonoBehaviour
 {
-    private Queue<PetFollowing> petQueue;
+    public List<PetFollowing> petList = new List<PetFollowing>(100);
+    int prevPetListCount = 0;
+
 
     private void Start()
     {
         PlayerBehavior.Instance.OnPlayerDamaged += CallWhenPlayerDamaged;
+
+        // 테스트용 인스턴스
+        PetFollowing pet1 = GameObject.Find("pet1").GetComponent<PetFollowing>();
+        PetFollowing pet2 = GameObject.Find("pet2").GetComponent<PetFollowing>();
+        petList.Add(pet1);
+        petList.Add(pet2);
     }
 
     private void OnDestroy()
@@ -17,25 +26,40 @@ public class PetManager : MonoBehaviour
         PlayerBehavior.Instance.OnPlayerDamaged -= CallWhenPlayerDamaged;
     }
 
+    void Update()
+    {
+        // 펫이 있을 경우, 펫에게 따라갈 대상의 위치 할당
+        // 리소스를 위해 펫 리스트에 변화가 생겼을 경우에만 실행
+        if (petList.Count > 0 && petList.Count != prevPetListCount)
+        {
+            // transform을 대입하는 것은 주소를 주는 것. 벨류를 주는 게 아니기 때문에 최초 1회만 주면 됨
+            // 첫 번째 펫에게는 플레이어의 위치 할당
+            petList[0].seniorTransform = PlayerBehavior.Instance.transform;
+            // 두 번째 펫부터는 그 앞의 펫 위치 할당 
+            for (int i = 1; i < petList.Count; i++)
+            {   
+                petList[i].seniorTransform = petList[i - 1].transform;
+            }
+            prevPetListCount = petList.Count;
+        }
+    }
+    // 플레이어가 데미지를 입었을 때
     public bool CallWhenPlayerDamaged()
     {
-        // 맨 앞에 펫 삭제
-        // 디큐
-
-        // if 큐 count != 0 (펫이 있으면)
-        if (petQueue.Count != 0)
-        {
-            petQueue.Dequeue();
+        // 펫이 남아있다면
+        if (petList.Count != 0)
+        {   // 펫을 하나 지우고 return true
+            petList.RemoveAt(0);
             return true;
         }
+        // 남아있는 펫이 없다면 return false
         else return false;
-        // 펫 있으면 return true, 없으면 return false
     }
+    // 플레이어가 펫을 획득 성공했을 때
     public bool OnPlayerGained(PetFollowing pet)
-    {
-        //petfollwing 객체 인큐
-        petQueue.Enqueue(pet);
+    { 
+        petList.Add(pet);
+        // 혹시 몰라서 bool타입 return 했으나, 아직 쓸 데는 없음 
         return true;
-        // return true;
     }
 }
