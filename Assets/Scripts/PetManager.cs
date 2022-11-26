@@ -2,24 +2,26 @@ using System.Collections;
 using System.Collections.Generic;
 using Unity.VisualScripting;
 using UnityEngine;
-
+using UnityEngine.UI;
 
 public class PetManager : MonoBehaviour
 { 
     public List<PetFollowing> petList = new List<PetFollowing>(100);
     int prevPetListCount = 0;
 
-
     private void Start()
     {
         PlayerBehavior.Instance.OnPlayerDamaged += CallWhenPlayerDamaged;
-        // 포인터로 pet[0]을 지정해놓고 pet[0]을 비활성화(setActive(false))하면 어떻게 되는가?
 
         // 테스트용 인스턴스
         PetFollowing pet1 = GameObject.Find("pet1").GetComponent<PetFollowing>();
         PetFollowing pet2 = GameObject.Find("pet2").GetComponent<PetFollowing>();
+        PetFollowing pet3 = GameObject.Find("pet3").GetComponent<PetFollowing>();
         petList.Add(pet1);
         petList.Add(pet2);
+        petList.Add(pet3);
+        //CallWhenPlayerDamaged();
+        //CallWhenPlayerDamaged();
     }
 
     private void OnDestroy()
@@ -48,6 +50,7 @@ public class PetManager : MonoBehaviour
     
     public bool CallWhenPlayerDamaged()
     {
+        Debug.Log("펫 제거 함수 호출");
         // 펫이 남아있다면
         if (petList.Count != 0)
         {   // 펫을 하나 지우고 return true

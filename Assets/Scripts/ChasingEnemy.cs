@@ -2,14 +2,13 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class ChasingPlayer : MonoBehaviour
+public class ChasingEnemy : MonoBehaviour
 {
     public float moveSpeed;
     public float damage;
     public float detectDistance;
-    Vector3 enemyMovement;
     Rigidbody2D rb;
-
+    Vector3 direction;
     Transform playerPosition;
 
     // Start is called before the first frame update
@@ -23,7 +22,7 @@ public class ChasingPlayer : MonoBehaviour
     void Update()
     {
         // 쫓아갈 방향 설정
-        Vector3 direction = playerPosition.position - transform.position;
+        direction = playerPosition.position - transform.position;
         // 당장은 왼쪽 오른쪽 방향전환밖에 없어서 주석처리했지만, 혹시 몰라서 남겨둠
         //float angle = Mathf.Atan2(direction.y, direction.x) * Mathf.Rad2Deg;
         //rb.rotation = angle;
@@ -41,7 +40,6 @@ public class ChasingPlayer : MonoBehaviour
             transform.localScale = scale;
         }
         direction.Normalize();
-        enemyMovement = direction;
 
 
 
@@ -54,12 +52,12 @@ public class ChasingPlayer : MonoBehaviour
         float distance = Vector3.Distance(playerPosition.position, transform.position);
         if (distance < detectDistance)
         {   // 탐지거리보다 가까우면 추격
-            MoveCharacter(enemyMovement);
+            MoveCharacter();
         }
     }
-    void MoveCharacter(Vector3 direction)
+    void MoveCharacter()
     {
-        rb.MovePosition((Vector3)transform.position + (direction * moveSpeed * Time.deltaTime));
+        rb.MovePosition((Vector3)transform.position + (moveSpeed * Time.deltaTime * direction));
     }
 
     // 플레이어와 충돌 시

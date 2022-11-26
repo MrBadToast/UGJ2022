@@ -52,7 +52,7 @@ public class PetFollowing : MonoBehaviour
         float distance = Vector3.Distance(seniorTransform.position, transform.position);
         if(distance > distanceLimit)
         {   // 현재 거리가 최소 거리보다 멀 때만 이동
-            transform.position += direction * Time.deltaTime;
+            transform.position += direction * Time.deltaTime * moveSpeed;
         }
     }
 
