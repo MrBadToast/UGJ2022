@@ -43,6 +43,7 @@ public class PlayerBehavior : MonoBehaviour
 
     [Title("References")]
     [SerializeField] private HealthBar healthBar;
+    [SerializeField] private RhythmBar rhythmBar;
     [SerializeField] private Transform DirectionArrowAnchor;
     [SerializeField] private GameObject DirectionArrowObject;
     [SerializeField] private GameObject DirectionArrowShot;
@@ -122,11 +123,13 @@ public class PlayerBehavior : MonoBehaviour
                 if (Input.GetKeyDown(key_tryConfirm))
                 {
                     controlState = ControlState.TIMING;
+                    rhythmBar.gameObject.SetActive(true);
                 }
             }
             else if(controlState == ControlState.TIMING)
             {
-
+                rhythmBar.BarMoving = true;
+                if(Input.GetKeyDown())
             }
         }
     }

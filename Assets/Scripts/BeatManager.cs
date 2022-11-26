@@ -4,8 +4,13 @@ using UnityEngine;
 
 public class BeatManager : MonoBehaviour
 {
+    private static BeatManager instance;
+    public static BeatManager Instance { get { return instance; } }
+
     [SerializeField] private float beatInterval = 1.0f;
+    public float BeatInterval { get { return beatInterval; }}
     [SerializeField] private float beatOffset = 0.5f;
+    public float BeatOffset { get { return beatOffset; }}
     [SerializeField] private float tollerance = 0.1f;
 
     [SerializeField] private AudioClip currentStageMusic;
@@ -14,12 +19,15 @@ public class BeatManager : MonoBehaviour
     private AudioSource aud;
 
     private float timer = 0;
+    public float Timer { get { return timer; } }
     private bool isBeatCountStarted = false;
     public bool IsBeatCountStarted { get { return isBeatCountStarted; } }
 
     private void Awake()
     {
         aud = GetComponent<AudioSource>();
+        if (instance == null) instance = this;
+        else Destroy(gameObject);
     }
 
     public void StartBeatSeq()
