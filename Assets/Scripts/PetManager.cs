@@ -13,15 +13,6 @@ public class PetManager : MonoBehaviour
     {
         PlayerBehavior.Instance.OnPlayerDamaged += CallWhenPlayerDamaged;
 
-        // 테스트용 인스턴스
-        PetFollowing pet1 = GameObject.Find("pet_flash").GetComponent<PetFollowing>();
-        PetFollowing pet2 = GameObject.Find("pet_candle").GetComponent<PetFollowing>();
-        PetFollowing pet3 = GameObject.Find("pet_bulb").GetComponent<PetFollowing>();
-        petList.Add(pet1);
-        petList.Add(pet2);
-        petList.Add(pet3);
-        //CallWhenPlayerDamaged();
-        //CallWhenPlayerDamaged();
     }
 
     private void OnDestroy()
@@ -38,7 +29,7 @@ public class PetManager : MonoBehaviour
             // transform을 대입하는 것은 주소를 주는 것. 벨류를 주는 게 아니기 때문에 최초 1회만 주면 됨
             // 첫 번째 펫에게는 플레이어의 위치 할당
             petList[0].seniorTransform = PlayerBehavior.Instance.transform;
-            // 두 번째 펫부터는 그 앞의 펫 위치 할당 
+            // 두 번째 펫부터는 그 앞의 펫 위치 할당 2
             for (int i = 1; i < petList.Count; i++)
             {   
                 petList[i].seniorTransform = petList[i - 1].transform;

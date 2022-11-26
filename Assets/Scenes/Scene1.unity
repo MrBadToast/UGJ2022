@@ -20502,6 +20502,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: d9f8d5af0291e4eb59d13d5719880513, type: 3}
+--- !u!1 &1610219223 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 1306661703151448629, guid: bdb7afc3a695441c8bb96fcdedaccc8f, type: 3}
+  m_PrefabInstance: {fileID: 1113749585}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &1628624869
 GameObject:
   m_ObjectHideFlags: 0
@@ -25913,6 +25918,10 @@ PrefabInstance:
       propertyPath: returnGame
       value: 
       objectReference: {fileID: 2076222033}
+    - target: {fileID: 4804529409210919691, guid: 17c7e40ca62da4c5f9c0c39c99cb0d5f, type: 3}
+      propertyPath: pauseMenuCanvas
+      value: 
+      objectReference: {fileID: 1610219223}
     - target: {fileID: 4804529409210919692, guid: 17c7e40ca62da4c5f9c0c39c99cb0d5f, type: 3}
       propertyPath: m_RootOrder
       value: 11
