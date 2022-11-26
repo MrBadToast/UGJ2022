@@ -14,7 +14,7 @@ public class RhythmBar : MonoBehaviour
         {
             BeatManager beat = BeatManager.Instance;
             barAnchor.rotation = Quaternion.Euler(new Vector3(0f, 0f,
-                Mathf.Sin((beat.Timer) * Mathf.PI) * 40f));
+                Mathf.Sin((beat.Timer + 0.5f) * Mathf.PI) * 40f));
         }
     }
 }

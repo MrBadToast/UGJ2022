@@ -39,15 +39,15 @@ public class BeatManager : MonoBehaviour
 
     public void Update()
     {
-        if (isBeatCountStarted)
-        {
-            timer += Time.deltaTime;
-            
-        }
+
     }
 
     public void FixedUpdate()
     {
+        if (isBeatCountStarted)
+        {
+            timer += Time.fixedDeltaTime;
+        }
 
         if (beatTestObject != null)
         {
