@@ -13,6 +13,7 @@ public class PetManager : MonoBehaviour
     private void Start()
     {
         PlayerBehavior.Instance.OnPlayerDamaged += CallWhenPlayerDamaged;
+        // 포인터로 pet[0]을 지정해놓고 pet[0]을 비활성화(setActive(false))하면 어떻게 되는가?
 
         // 테스트용 인스턴스
         PetFollowing pet1 = GameObject.Find("pet1").GetComponent<PetFollowing>();
@@ -49,6 +50,8 @@ public class PetManager : MonoBehaviour
         // 펫이 남아있다면
         if (petList.Count != 0)
         {   // 펫을 하나 지우고 return true
+            // 펫 오브젝트 자체를 destroy 
+            Destroy(petList[0].gameObject);
             petList.RemoveAt(0);
             return true;
         }

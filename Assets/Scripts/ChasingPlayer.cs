@@ -6,6 +6,7 @@ public class ChasingPlayer : MonoBehaviour
 {
     public float moveSpeed;
     public float damage;
+    public float detectDistance;
     Vector3 enemyMovement;
     Rigidbody2D rb;
 
@@ -41,12 +42,20 @@ public class ChasingPlayer : MonoBehaviour
         }
         direction.Normalize();
         enemyMovement = direction;
+
+
+
     }
 
     // PetFollowing에서는 쓰지 않았던 FixedUpdate를 여기선 쓴다. 더 고치기 불안해서 그냥 냅둠.
     private void FixedUpdate()
     {
-        MoveCharacter(enemyMovement);
+        // 플레이어와 적 사이의 거리 계산 
+        float distance = Vector3.Distance(playerPosition.position, transform.position);
+        if (distance < detectDistance)
+        {   // 탐지거리보다 가까우면 추격
+            MoveCharacter(enemyMovement);
+        }
     }
     void MoveCharacter(Vector3 direction)
     {
