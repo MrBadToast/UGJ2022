@@ -84,12 +84,12 @@ public class PlayerBehavior : MonoBehaviour
     private void Start()
     {
         currentHealth = fullHealth;
-        forwardingDirection = Vector2.right * moveSpeed;
+        forwardingDirection = Vector2.right;
     }
 
     private void FixedUpdate()
     {
-        rbody.velocity = forwardingDirection;
+        rbody.velocity = forwardingDirection * moveSpeed;
     }
 
     private void Update()
@@ -246,7 +246,7 @@ public class PlayerBehavior : MonoBehaviour
             spriteRenderer.flipX = true;
         }
 
-        forwardingDirection = direction;
+        forwardingDirection = direction.normalized;
     }
 }
 
