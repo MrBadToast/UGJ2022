@@ -588,6 +588,40 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 784906401}
   m_CullTransparentMesh: 1
+--- !u!1 &843264742 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 8054341786458737894, guid: 3ba47c8fa5217964f93418ab1b837b8a, type: 3}
+  m_PrefabInstance: {fileID: 8054341787071777312}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &843264746 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 8054341786458737897, guid: 3ba47c8fa5217964f93418ab1b837b8a, type: 3}
+  m_PrefabInstance: {fileID: 8054341787071777312}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 843264742}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e34797bc785f6654d8c867ef7b187076, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &843264747
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 843264742}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e52de21a22b6dd44c9cc19f810c65059, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Events:
+    m_Signals:
+    - {fileID: 11400000, guid: 740402d265f13c14585491d0892e7af6, type: 2}
+    m_Events:
+    - m_PersistentCalls:
+        m_Calls: []
 --- !u!1 &907035418
 GameObject:
   m_ObjectHideFlags: 0
@@ -25430,6 +25464,18 @@ MonoBehaviour:
             m_StringArgument: 
             m_BoolArgument: 0
           m_CallState: 2
+        - m_Target: {fileID: 843264746}
+          m_TargetAssemblyTypeName: PlayerBehavior, Assembly-CSharp
+          m_MethodName: ActivateControl
+          m_Mode: 1
+          m_Arguments:
+            m_ObjectArgument: {fileID: 0}
+            m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+            m_IntArgument: 0
+            m_FloatArgument: 0
+            m_StringArgument: 
+            m_BoolArgument: 0
+          m_CallState: 2
 --- !u!320 &1867003476
 PlayableDirector:
   m_ObjectHideFlags: 0
@@ -25447,6 +25493,8 @@ PlayableDirector:
   m_SceneBindings:
   - key: {fileID: -3406994496550716495, guid: 7283be3e68d7b24448fc7feecf5e962e, type: 2}
     value: {fileID: 1867003475}
+  - key: {fileID: 1251060598020600062, guid: 7283be3e68d7b24448fc7feecf5e962e, type: 2}
+    value: {fileID: 0}
   m_ExposedReferences:
     m_References: []
 --- !u!82 &1867003477

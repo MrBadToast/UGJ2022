@@ -53,15 +53,16 @@ public class PlayerBehavior : MonoBehaviour
     [SerializeField] private string WallObjectTag;
     [SerializeField] private LayerMask WallLayer;
 
-    private bool isControlActive = true;
+    private bool isControlActive = false;
     private float currentHealth;
     private float rhythmTimer = 0f;
     private float damageT = 0f;
-    private Vector2 forwardingDirection = Vector2.right;
+    private Vector2 forwardingDirection;
     [SerializeField] private ControlState controlState = ControlState.NONE;
-    public bool IsControlValid { get { return isControlActive && Time.timeScale != 0f; } }
+    public bool IsControlValid { get { return (isControlActive == true) && (Time.timeScale != 0f); } }
 
     private Rigidbody2D rbody;
+    private Animator animator;
 
 
     private void Awake()
@@ -76,13 +77,12 @@ public class PlayerBehavior : MonoBehaviour
         }
 
         rbody = GetComponent<Rigidbody2D>();
-        spriteRenderer = GetComponent<SpriteRenderer>();
+        animator = GetComponent<Animator>();
     }
 
     private void Start()
     {
         currentHealth = fullHealth;
-        forwardingDirection = Vector2.right;
     }
 
     private void FixedUpdate()
@@ -94,9 +94,13 @@ public class PlayerBehavior : MonoBehaviour
     {
         damageT -= Time.deltaTime;
 
+        animator.SetBool("IsWalking", false);
+
         if (IsControlValid)
         {
             rbody.velocity = Vector2.Lerp(rbody.velocity, forwardingDirection.normalized, acceleration);
+
+            animator.SetBool("IsWalking",true);
 
             if (controlState == ControlState.NONE)
             {
@@ -166,12 +170,14 @@ public class PlayerBehavior : MonoBehaviour
 
         if (damageAmount >= currentHealth)
         {
+            animator.SetTrigger("Dead");
             PlayerDied();
             currentHealth = 0f;
         }
         else
         {
             currentHealth -= damageAmount;
+            animator.SetTrigger("Hurt");
             StopCoroutine("Cor_DamageFliker");
             StartCoroutine("Cor_DamageFliker",DamageCooldown);
             OnPlayerDamaged.Invoke();
@@ -192,6 +198,12 @@ public class PlayerBehavior : MonoBehaviour
         }
 
         healthBar.SetHealthbar(currentHealth / fullHealth);
+    }
+
+    public void ActivateControl()
+    {
+        isControlActive = true;
+        forwardingDirection = Vector2.right * moveSpeed;
     }
 
     private IEnumerator Cor_RhythmBarTermination()
