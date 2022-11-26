@@ -42,6 +42,7 @@ public class PlayerBehavior : MonoBehaviour
     [SerializeField] private float DamageCooldown = 2.0f;
 
     [Title("Prefabs")]
+    public GameObject playerHitParticle;
     public GameObject petGainParticle;
     public GameObject petLostParticle;
 
@@ -152,6 +153,7 @@ public class PlayerBehavior : MonoBehaviour
                         Vector3 mousePos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
                         Vector2 direction = mousePos - transform.position;
                         SetPlayerDirection(direction);
+                        Instantiate(playerHitParticle,transform);
                     }
                     else
                     {

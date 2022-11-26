@@ -8,4 +8,22 @@ public class EndingSceneLoader : MonoBehaviour
     {
         SceneLoader.Instance.LoadScene("Title");
     }
+
+    float keyT = 0f;
+
+    private void Update()
+    {
+        if (Input.GetKey(KeyCode.Escape))
+        {
+            keyT += Time.deltaTime;
+        }
+        else
+        {
+            keyT = 0f;
+        }
+        if(keyT > 3.0f)
+        {
+            Application.Quit();
+        }
+    }
 }

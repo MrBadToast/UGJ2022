@@ -51,13 +51,13 @@ public class PauseMenu : MonoBehaviour
     public void ResumeBtn()
     {
         Debug.Log("Resume btn");
+
         Resume();
     }
     // 타이틀로 가기 버튼 클릭 
     public void ToTitle()
     {
         Debug.Log("ToTitle btn");
-        //Time.timeScale = 1f;
-        //SceneManager.LoadScene("MainMenu");
+        SceneLoader.Instance.LoadScene("Title");
     }
 }
